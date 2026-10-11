@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Special IA</title>
+  <rect width="64" height="64" rx="14" fill="#fff"/>
+  <g transform="translate(11 11) scale(.42)"><path d="M50 6 C52 33 61 45.5 95 50 C61 54.5 52 67 50 94 C48 67 39 54.5 5 50 C39 45.5 48 33 50 6 Z" fill="#0e0e0e"/></g>
+</svg>
