@@ -18,9 +18,41 @@
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.webmanifest" />
+    <script>
+      // Fica antes de tudo o que carrega arquivo do pacote, para ouvir a falha deles.
+      // O index guardado no navegador (ou na rede) pode ser de uma publicação anterior e pedir um arquivo do
+      // programa que o site já não tem. Sem isto a tela ficava em "Carregando…" para sempre: aqui a página se
+      // recarrega UMA vez buscando o index de novo (o parâmetro `v` fura as cópias guardadas). Vale só para a
+      // ABERTURA (até o evento `load`) e só para arquivos do pacote (assets/); depois de aberto, quem cuida de um
+      // pedaço que não carrega é `src/app/site/pedaco.ts`, que olha se há trabalho em andamento. A marca no
+      // sessionStorage é a mesma de lá e garante que não vira laço.
+      (function () {
+        function guarda(e) {
+          var t = e.target;
+          var url = t && (t.src || t.href);
+          if (!t || (t.tagName !== 'SCRIPT' && t.tagName !== 'LINK') || !url || url.indexOf('/assets/') < 0) return;
+          try {
+            var chave = 'special-ia.pedaco.recarga';
+            var agora = Date.now();
+            if (agora - (Number(sessionStorage.getItem(chave)) || 0) < 120000) return;
+            sessionStorage.setItem(chave, String(agora));
+            var u = new URL(location.href);
+            u.searchParams.set('v', agora.toString(36));
+            location.replace(u.toString());
+          } catch (x) {
+            /* sem sessionStorage não há como garantir "uma vez": fica como está */
+          }
+        }
+        addEventListener('error', guarda, true);
+        addEventListener('load', function () {
+          removeEventListener('error', guarda, true);
+        });
+      })();
+    </script>
     <style>html,body{color:#fff;background:#0e0e0e;margin:0}.boot{color:#8a8a8a;background:radial-gradient(60% 120% at 80% 0,#db5b142e 0%,#db5b1400 70%);flex-direction:column;justify-content:center;align-items:center;gap:16px;min-height:100dvh;font:400 13px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;display:flex}.boot__mark{background:#fff;border-radius:14px;place-items:center;width:48px;height:48px;display:grid}.boot__mark svg{width:28px;height:28px;animation:1.6s ease-in-out infinite boot-pulse}@keyframes boot-pulse{50%{opacity:.35}}@media (prefers-reduced-motion:reduce){.boot__mark svg{animation:none}}</style>
-    <script type="module" crossorigin src="./assets/index-DAx1cWd4.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-D6gXsNTQ.css">
+    <script type="module" crossorigin src="./assets/index-BhEkmBTZ.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-erV6LK11.css">
+    <meta name="special-ia-versao" content="bb13b81f96f513b625a92f957ad4e2afab90e461|2026-10-12T22:13:54Z">
   </head>
   <body>
     <div id="root">
